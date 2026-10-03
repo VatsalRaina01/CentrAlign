@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus — Autonomous AI Task Worker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-brand">
+            <div class="logo-icon">⚡</div>
+            <div>
+                <h1 class="logo-text">Nexus</h1>
+                <span class="logo-subtitle">Autonomous AI Task Worker</span>
+            </div>
+        </div>
+        <div class="header-status">
+            <span class="status-dot" id="connection-dot"></span>
+            <span id="connection-status">Connecting...</span>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar: Agent Status -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Agent Status</h3>
+                <div class="agent-phase" id="agent-phase">
+                    <span class="phase-icon">💤</span>
+                    <span class="phase-text">Idle — Awaiting task</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Current Plan</h3>
+                <div class="plan-steps" id="plan-steps">
+                    <p class="empty-text">No active plan</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Discovered Info</h3>
+                <div class="context-vars" id="context-vars">
+                    <p class="empty-text">No data yet</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Screenshots</h3>
+                <div class="screenshots" id="screenshots">
+                    <p class="empty-text">No screenshots</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-content">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message system-message">
+                    <div class="message-icon">⚡</div>
+                    <div class="message-body">
+                        <div class="message-sender">Nexus</div>
+                        <div class="message-text">
+                            Hello! I'm <strong>Nexus</strong>, your autonomous AI task worker. I can understand your goals, plan actions, 
+                            use tools (browser, files, APIs, email), and complete tasks with verification.<br><br>
+                            Try something like:<br>
+                            <em>"Check all our company services. If anything is down or degraded, create support tickets and notify the IT team."</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approval Banner (hidden by default) -->
+            <div class="approval-banner" id="approval-banner" style="display: none;">
+                <div class="approval-content">
+                    <span class="approval-icon">🔒</span>
+                    <div class="approval-details">
+                        <strong>Approval Required</strong>
+                        <p id="approval-description">Action description here</p>
+                        <span class="approval-risk" id="approval-risk">HIGH RISK</span>
+                    </div>
+                    <div class="approval-actions">
+                        <button class="btn btn-approve" id="btn-approve" onclick="submitApproval(true)">✅ Approve</button>
+                        <button class="btn btn-reject" id="btn-reject" onclick="submitApproval(false)">❌ Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <form id="chat-form" onsubmit="sendMessage(event)">
+                    <div class="input-wrapper">
+                        <textarea 
+                            id="user-input" 
+                            placeholder="Describe a task for Nexus to complete autonomously..."
+                            rows="1"
+                            autofocus
+                        ></textarea>
+                        <button type="submit" class="btn-send" id="btn-send">
+                            <span>Send</span>
+                            <span class="send-icon">→</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

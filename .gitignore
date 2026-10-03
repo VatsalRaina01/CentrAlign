@@ -1,0 +1,27 @@
+# Environment
+venv/
+.venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+execution_logs/
+
+# Browser
+screenshots/
+
+# OS
+.DS_Store
+Thumbs.db

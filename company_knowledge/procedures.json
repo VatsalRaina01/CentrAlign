@@ -1,0 +1,38 @@
+{
+  "service_down": {
+    "description": "Procedure when a critical service is detected as down",
+    "steps": [
+      "Check service status on the IT portal dashboard",
+      "Verify the outage by checking the service details",
+      "Create a P1 (Critical) support ticket immediately",
+      "Assign the ticket to the responsible team member",
+      "Notify the IT Manager (Sarah Chen) via email",
+      "If VPN or network related, also notify DevOps Lead (Mike Johnson)",
+      "If multiple services are affected, escalate to IT Manager"
+    ],
+    "sla": "30 minutes for P1 incidents",
+    "priority": "P1"
+  },
+  "service_degraded": {
+    "description": "Procedure when a service is performing below expected levels",
+    "steps": [
+      "Check service metrics on the IT portal",
+      "Create a P2 (High) support ticket",
+      "Assign to the responsible team member",
+      "Notify the IT Manager if response time exceeds 5x normal",
+      "Monitor for escalation to 'down' status"
+    ],
+    "sla": "2 hours for P2 incidents",
+    "priority": "P2"
+  },
+  "routine_check": {
+    "description": "Regular IT health check procedure",
+    "steps": [
+      "Review all service statuses on the IT portal",
+      "Check for any open tickets that need attention",
+      "Verify backup systems are operational",
+      "Report summary to IT Manager"
+    ],
+    "frequency": "Daily at 9:00 AM"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "services": [
+    {
+      "name": "Email Server",
+      "type": "communication",
+      "criticality": "high",
+      "vendor": "Microsoft Exchange",
+      "monitoring_url": "http://localhost:5001/api/services/1",
+      "responsible_person": "Priya Sharma"
+    },
+    {
+      "name": "VPN Gateway",
+      "type": "network",
+      "criticality": "high",
+      "vendor": "Cisco AnyConnect",
+      "monitoring_url": "http://localhost:5001/api/services/2",
+      "responsible_person": "Mike Johnson"
+    },
+    {
+      "name": "CRM System",
+      "type": "business_application",
+      "criticality": "high",
+      "vendor": "Salesforce",
+      "monitoring_url": "http://localhost:5001/api/services/3",
+      "responsible_person": "Sarah Chen"
+    },
+    {
+      "name": "Database Cluster",
+      "type": "infrastructure",
+      "criticality": "critical",
+      "vendor": "PostgreSQL",
+      "monitoring_url": "http://localhost:5001/api/services/4",
+      "responsible_person": "Priya Sharma"
+    },
+    {
+      "name": "File Storage",
+      "type": "infrastructure",
+      "criticality": "medium",
+      "vendor": "Synology NAS",
+      "monitoring_url": "http://localhost:5001/api/services/5",
+      "responsible_person": "Priya Sharma"
+    },
+    {
+      "name": "CI/CD Pipeline",
+      "type": "development",
+      "criticality": "medium",
+      "vendor": "Jenkins",
+      "monitoring_url": "http://localhost:5001/api/services/6",
+      "responsible_person": "Mike Johnson"
+    }
+  ]
+}

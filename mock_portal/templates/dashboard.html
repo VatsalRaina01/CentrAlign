@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Acme Corp IT Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Service Status Dashboard</h1>
+    <p class="subtitle">Real-time monitoring of all IT services</p>
+</div>
+
+<div class="status-summary" id="status-summary">
+    <div class="status-card status-operational">
+        <span class="status-count" id="count-operational">{{ operational }}</span>
+        <span class="status-label">Operational</span>
+    </div>
+    <div class="status-card status-degraded">
+        <span class="status-count" id="count-degraded">{{ degraded }}</span>
+        <span class="status-label">Degraded</span>
+    </div>
+    <div class="status-card status-down">
+        <span class="status-count" id="count-down">{{ down }}</span>
+        <span class="status-label">Down</span>
+    </div>
+    <div class="status-card status-total">
+        <span class="status-count" id="count-total">{{ total }}</span>
+        <span class="status-label">Total Services</span>
+    </div>
+</div>
+
+<div class="services-grid" id="services-list">
+    {% for service in services %}
+    <div class="service-card service-{{ service.status }}" id="service-{{ service.id }}">
+        <div class="service-header">
+            <h3 class="service-name">{{ service.name }}</h3>
+            <span class="service-status-badge badge-{{ service.status }}">
+                {% if service.status == 'operational' %}🟢{% elif service.status == 'degraded' %}🟡{% else %}🔴{% endif %}
+                {{ service.status | capitalize }}
+            </span>
+        </div>
+        <p class="service-description">{{ service.description }}</p>
+        <div class="service-details">
+            <span class="detail">Uptime: {{ service.uptime }}</span>
+            {% if service.response_time_ms %}
+            <span class="detail">Response: {{ service.response_time_ms }}ms</span>
+            {% endif %}
+        </div>
+        {% if service.error_message %}
+        <div class="service-error">
+            ⚠️ {{ service.error_message }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

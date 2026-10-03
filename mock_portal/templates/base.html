@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Acme Corp IT Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-logo">🏢</span>
+            <span class="nav-title">Acme Corp IT Portal</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link" id="nav-dashboard">Dashboard</a>
+            <a href="/tickets" class="nav-link" id="nav-tickets">Tickets</a>
+            <a href="/tickets/create" class="nav-link nav-link-primary" id="nav-create-ticket">+ New Ticket</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Acme Corp — Internal IT Operations Portal</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "levels": [
+    {
+      "level": 1,
+      "name": "First Response",
+      "responder": "On-duty SysAdmin (Priya Sharma)",
+      "response_time": "15 minutes",
+      "conditions": "Any service alert or ticket creation"
+    },
+    {
+      "level": 2,
+      "name": "Team Lead Escalation",
+      "responder": "DevOps Lead (Mike Johnson)",
+      "response_time": "30 minutes",
+      "conditions": "P1 ticket unresolved after 30 minutes, or network/infrastructure issues"
+    },
+    {
+      "level": 3,
+      "name": "Manager Escalation",
+      "responder": "IT Manager (Sarah Chen)",
+      "response_time": "1 hour",
+      "conditions": "P1 ticket unresolved after 1 hour, multiple services affected, or customer impact"
+    }
+  ],
+  "rules": [
+    "Always notify IT Manager for P1 incidents",
+    "VPN outages automatically escalate to DevOps Lead",
+    "If more than 2 services are down, trigger Level 3 escalation",
+    "After-hours P1 incidents: call IT Manager directly"
+  ]
+}

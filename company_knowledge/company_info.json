@@ -1,0 +1,35 @@
+{
+  "name": "Acme Corp",
+  "industry": "Technology",
+  "size": "250 employees",
+  "departments": ["Engineering", "Sales", "IT Operations", "HR", "Finance"],
+  "it_team": [
+    {
+      "name": "Sarah Chen",
+      "role": "IT Manager",
+      "email": "sarah@acmecorp.com",
+      "department": "IT Operations",
+      "responsibilities": ["Team management", "Vendor relations", "Budget", "Escalation point"]
+    },
+    {
+      "name": "Mike Johnson",
+      "role": "DevOps Lead",
+      "email": "mike@acmecorp.com",
+      "department": "IT Operations",
+      "responsibilities": ["CI/CD", "Infrastructure", "Cloud services", "VPN"]
+    },
+    {
+      "name": "Priya Sharma",
+      "role": "SysAdmin",
+      "email": "priya@acmecorp.com",
+      "department": "IT Operations",
+      "responsibilities": ["Server maintenance", "Database", "File storage", "User accounts"]
+    }
+  ],
+  "internal_portal_url": "http://localhost:5001",
+  "communication_channels": {
+    "primary": "email",
+    "urgent": "phone",
+    "internal": "Slack"
+  }
+}
