@@ -30,8 +30,8 @@ class LLMClient:
         elif settings.GROQ_API_KEY:
             self.base_url = "https://api.groq.com/openai/v1"
             self.api_key = settings.GROQ_API_KEY
-            self.model = "llama-3.3-70b-versatile"
-            logger.info("Using Groq provider")
+            self.model = "openai/gpt-oss-120b"
+            logger.info("Using Groq provider with openai/gpt-oss-120b")
         elif settings.GEMINI_API_KEY:
             self.base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
             self.api_key = settings.GEMINI_API_KEY
