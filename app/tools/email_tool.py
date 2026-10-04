@@ -78,16 +78,16 @@ class EmailTool(BaseTool):
             return await self._mock_send(to, subject, body)
 
         try:
+            inbox_id = settings.AGENTMAIL_FROM_ADDRESS
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{AGENTMAIL_API_BASE}/emails",
+                    f"{AGENTMAIL_API_BASE}/inboxes/{inbox_id}/messages/send",
                     headers={
                         "Authorization": f"Bearer {settings.AGENTMAIL_API_KEY}",
                         "Content-Type": "application/json",
                     },
                     json={
-                        "from": settings.AGENTMAIL_FROM_ADDRESS,
-                        "to": [to],
+                        "to": to,
                         "subject": subject,
                         "text": body,
                     },
@@ -98,10 +98,11 @@ class EmailTool(BaseTool):
                     return ToolResult(
                         success=True,
                         data={
-                            "message": "Email sent successfully",
+                            "message": "Email sent successfully via AgentMail",
                             "to": to,
                             "subject": subject,
-                            "email_id": response_data.get("id", "unknown"),
+                            "message_id": response_data.get("message_id", "unknown"),
+                            "thread_id": response_data.get("thread_id", ""),
                         },
                     )
                 else:
