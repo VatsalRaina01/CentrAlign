@@ -182,9 +182,24 @@ class AgentCore:
                     "tool": step.get("tool", ""),
                 })
 
-                # ── 3a: CHECK APPROVAL ──
-                tool = self.tools.get(step.get("tool", ""))
-                tool_risk = tool.risk_level if tool else RiskLevel.MEDIUM
+                # ── 3a: CHECK TOOL & APPROVAL ──
+                tool_name = step.get("tool", "")
+                tool = self.tools.get(tool_name)
+
+                # Skip non-executable / informational steps without asking approval
+                if not tool:
+                    logger.warning(f"Step {step_id} has non-executable tool '{tool_name}'. Skipping.")
+                    await self._emit_status("step_skipped", {
+                        "step_id": step_id,
+                        "reason": f"Non-executable step: {step.get('description', '')}",
+                    })
+                    self.short_term.add_observation(
+                        f"Informational note: {step.get('description', '')}"
+                    )
+                    step_index += 1
+                    continue
+
+                tool_risk = tool.risk_level
                 effective_risk = self.approval.get_risk_level_for_step(step, tool_risk)
 
                 if effective_risk in (RiskLevel.MEDIUM, RiskLevel.HIGH):
@@ -281,12 +296,12 @@ class AgentCore:
                         plan[step_index] = recovery["modified_step"]
                         continue
 
-                    elif recovery["action"] == "ask_human":
+                    elif recovery["action"] in ("ask_human", "skip"):
                         await self._emit_status("human_help_needed", {
                             "message": recovery["message"],
                             "step": step,
                         })
-                        # For prototype, skip and continue
+                        # Skip and continue to next step
                         step_index += 1
                         continue
 

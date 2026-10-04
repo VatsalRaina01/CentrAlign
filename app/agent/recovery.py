@@ -20,10 +20,12 @@ class RecoveryManager:
     def __init__(self):
         self.max_retries = settings.MAX_RETRIES
         self.attempt_counts: dict[int, int] = {}  # step_id → attempt count
+        self.alternatives_attempted: set[int] = set()
 
     def reset(self):
         """Reset attempt counts for a new task."""
         self.attempt_counts = {}
+        self.alternatives_attempted = set()
 
     def handle_failure(
         self,
@@ -50,10 +52,28 @@ class RecoveryManager:
             f"Handling failure for step {step_id} (attempt {attempts}/{self.max_retries}): {error}"
         )
 
+        # Unknown tool or invalid tool: skip immediately rather than looping
+        tool_name = step.get("tool", "")
+        if tool_name == "none" or "Unknown tool" in error:
+            return {
+                "action": "skip",
+                "modified_step": None,
+                "message": f"Skipping non-executable step '{description}' (tool: '{tool_name}').",
+            }
+
+        # If this is already an alternative step that failed, do not loop alternatives!
+        if description.startswith("[ALTERNATIVE]") or step_id in self.alternatives_attempted:
+            return {
+                "action": "ask_human",
+                "modified_step": None,
+                "message": f"Alternative approach for step '{description}' could not be completed ({error}). Continuing.",
+            }
+
         # Check if we've exceeded max retries
         if attempts > self.max_retries:
             if failure_alt:
-                # Try the alternative approach
+                # Try the alternative approach once
+                self.alternatives_attempted.add(step_id)
                 logger.info(f"Max retries exceeded, trying alternative: {failure_alt}")
                 return {
                     "action": "alternative",

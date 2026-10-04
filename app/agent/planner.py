@@ -81,6 +81,8 @@ Available tools and their actions:
 - send_email: send email with to, subject, body
 
 Important:
+- EVERY step MUST use one of the 4 valid tools: 'browser', 'api_request', 'file_operations', or 'send_email'.
+- NEVER set 'tool' to 'none', 'user', or leave it blank. Every step must be an autonomous tool execution.
 - Use the company's internal portal URL for internal system interactions
 - Check service status BEFORE creating tickets
 - Include verification steps
@@ -107,7 +109,7 @@ REPLAN_PROMPT = """You are an autonomous AI task worker. Your original plan enco
 
 Create an adjusted plan that:
 1. Doesn't repeat already completed steps
-2. Addresses the failure with an alternative approach
+2. Addresses the failure with an alternative approach using valid tools ('browser', 'api_request', 'file_operations', 'send_email')
 3. Still achieves the original goal
 
 Respond in the same JSON plan format as before."""
@@ -166,9 +168,29 @@ class Planner:
         ]
 
         result = self.llm.chat_json(messages)
-        plan = result.get("plan", [])
+        raw_plan = result.get("plan", [])
         reasoning = result.get("reasoning", "")
-        logger.info(f"Plan created with {len(plan)} steps")
+
+        # Sanitize plan: ensure every step has an executable tool
+        valid_tools = {"browser", "api_request", "file_operations", "send_email"}
+        plan = []
+        for step in raw_plan:
+            tool_name = str(step.get("tool", "")).lower().strip()
+            desc = step.get("description", "").lower()
+            if tool_name not in valid_tools:
+                # Infer correct tool or skip non-tool steps
+                if any(w in desc for w in ["email", "notify", "alert", "mail"]):
+                    step["tool"] = "send_email"
+                elif any(w in desc for w in ["ticket", "api", "post"]):
+                    step["tool"] = "api_request"
+                elif any(w in desc for w in ["portal", "dashboard", "browser", "navigate", "page", "status"]):
+                    step["tool"] = "browser"
+                else:
+                    logger.info(f"Skipping non-executable step: {step.get('description')}")
+                    continue
+            plan.append(step)
+
+        logger.info(f"Plan created with {len(plan)} executable steps")
         return plan, reasoning
 
     def replan(
