@@ -30,8 +30,8 @@ class LLMClient:
         elif settings.GROQ_API_KEY:
             self.base_url = "https://api.groq.com/openai/v1"
             self.api_key = settings.GROQ_API_KEY
-            self.model = "openai/gpt-oss-120b"
-            logger.info("Using Groq provider with openai/gpt-oss-120b")
+            self.model = "openai/gpt-oss-20b"
+            logger.info("Using Groq provider with openai/gpt-oss-20b (high rate-limit)")
         elif settings.GEMINI_API_KEY:
             self.base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
             self.api_key = settings.GEMINI_API_KEY
@@ -46,6 +46,7 @@ class LLMClient:
         self.client = OpenAI(
             base_url=self.base_url,
             api_key=self.api_key,
+            max_retries=0,
         )
         self.temperature = settings.LLM_TEMPERATURE
         self.max_tokens = settings.LLM_MAX_TOKENS
