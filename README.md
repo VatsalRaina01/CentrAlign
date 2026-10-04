@@ -3,7 +3,7 @@
 > An AI worker that takes natural language tasks and autonomously completes them using a computer — understanding goals, planning actions, using tools, verifying outcomes, and involving humans only when necessary.
 
 **Built for:** CentrAlign AI Engineering Intern Assignment  
-**Author:** [Your Name]
+**Author:** Vatsal Raina
 
 ---
 
@@ -98,7 +98,7 @@ Goal → Understand → Plan → Execute → Observe → Adapt → Verify → Co
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/VatsalRaina01/CentrAlign.git
 cd Centralign
 
 # Create virtual environment
