@@ -12,6 +12,9 @@ class Settings(BaseSettings):
 
     # LLM Configuration
     GITHUB_TOKEN: str = Field(default="", description="GitHub PAT for Models API")
+    OPENAI_API_KEY: str = Field(default="", description="OpenAI API key")
+    GROQ_API_KEY: str = Field(default="", description="Groq API key")
+    GEMINI_API_KEY: str = Field(default="", description="Gemini API key")
     LLM_MODEL: str = Field(default="gpt-4o-mini", description="LLM model name")
     LLM_BASE_URL: str = Field(
         default="https://models.inference.ai.azure.com",
