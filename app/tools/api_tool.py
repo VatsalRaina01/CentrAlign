@@ -66,9 +66,10 @@ class APITool(BaseTool):
 
     async def execute(self, **kwargs) -> ToolResult:
         """Make an HTTP request."""
-        method = kwargs.get("method", "GET").upper()
+        method = kwargs.get("method") or kwargs.get("action") or "GET"
+        method = method.upper()
         url = kwargs.get("url")
-        body = kwargs.get("body")
+        body = kwargs.get("body") or kwargs.get("data") or kwargs.get("json")
         headers = kwargs.get("headers", {})
 
         if not url:

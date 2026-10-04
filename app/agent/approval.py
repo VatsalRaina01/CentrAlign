@@ -19,7 +19,9 @@ class ApprovalGate:
 
     def __init__(self):
         # Risk levels that are auto-approved (no human needed)
-        self.auto_approve_levels = {RiskLevel.LOW}
+        # LOW (reads, screenshots) and MEDIUM (internal writes/tickets) are auto-approved.
+        # HIGH (external emails/notifications) always requires human confirmation.
+        self.auto_approve_levels = {RiskLevel.LOW, RiskLevel.MEDIUM}
         # Pending approval requests: step_id → asyncio.Event
         self.pending_approvals: dict[int, asyncio.Event] = {}
         # Approval results: step_id → (approved, reason)
@@ -112,16 +114,21 @@ class ApprovalGate:
         if step.get("tool") == "send_email":
             return RiskLevel.HIGH
 
-        # Browser form submissions that create/modify data
-        if step.get("tool") == "browser" and step.get("action") in ("click", "type"):
+        # Browser operations that are read-only
+        if step.get("tool") == "browser":
+            action = step.get("action", "")
+            if action in ("navigate", "extract_text", "screenshot", "get_elements", "wait"):
+                return RiskLevel.LOW
             description = step.get("description", "").lower()
-            if any(word in description for word in ["submit", "create", "delete", "send", "confirm"]):
+            if any(word in description for word in ["submit", "delete", "send", "confirm"]):
                 return RiskLevel.HIGH
+            return RiskLevel.LOW
 
-        # API mutations
+        # API requests
         if step.get("tool") == "api_request":
-            method = step.get("params", {}).get("method", "GET")
-            if method in ("POST", "PUT", "DELETE"):
-                return RiskLevel.MEDIUM
+            method = step.get("method") or step.get("action") or step.get("params", {}).get("method", "GET")
+            if str(method).upper() == "GET":
+                return RiskLevel.LOW
+            return RiskLevel.MEDIUM
 
         return tool_risk

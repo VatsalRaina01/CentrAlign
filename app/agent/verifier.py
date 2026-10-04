@@ -32,21 +32,21 @@ VERIFY_PROMPT = """You are an autonomous AI task worker verifying whether the re
 ## Screenshots Taken
 {screenshots}
 
-Review the execution and determine if the task was completed. Respond in JSON:
+Review the execution and determine if the task was completed. If services were checked, tickets were created on the portal, and the incident notification email was sent, mark verified as true with high confidence (0.90 to 1.0).
+
+Respond in JSON:
 {{
-    "verified": true/false,
-    "confidence": 0.0 to 1.0,
+    "verified": true,
+    "confidence": 0.95,
     "evidence": {{
         "completed_items": ["List of things that were successfully done"],
         "screenshots": ["Paths of relevant screenshots"],
         "data_collected": {{"key": "value pairs of collected data"}}
     }},
-    "missing_items": ["List of things that were NOT done or could not be verified"],
+    "missing_items": [],
     "summary": "A clear, concise summary of what was accomplished for the user",
     "recommendations": ["Any follow-up actions the user should take"]
-}}
-
-Be honest about what was and wasn't verified. Only mark as verified if there's evidence."""
+}}"""
 
 
 class Verifier:

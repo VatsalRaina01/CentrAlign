@@ -105,7 +105,15 @@ def api_create_ticket():
     if not data:
         return jsonify({"error": "No JSON body provided"}), 400
 
-    required_fields = ["title", "description", "priority", "service"]
+    service_val = data.get("service")
+    if not service_val and "service_id" in data:
+        srv = get_service(data["service_id"])
+        service_val = srv["name"] if srv else f"Service {data['service_id']}"
+
+    if not service_val:
+        return jsonify({"error": "Missing required field: service"}), 400
+
+    required_fields = ["title", "description", "priority"]
     for field in required_fields:
         if field not in data:
             return jsonify({"error": f"Missing required field: {field}"}), 400
@@ -114,7 +122,7 @@ def api_create_ticket():
         title=data["title"],
         description=data["description"],
         priority=data["priority"],
-        service=data["service"],
+        service=service_val,
         assigned_to=data.get("assigned_to", "Unassigned"),
     )
     return jsonify({"ticket": ticket, "message": "Ticket created successfully"}), 201
