@@ -167,7 +167,14 @@ class LLMClient:
             }
 
         # 2. Plan creation
-        if "Create a plan as a JSON array of steps" in user_content or "CREATE_PLAN_PROMPT" in user_content or "Available tools and their actions" in user_content:
+        if "plan" in user_content.lower() or "step" in user_content.lower():
+            # Check for user-specified email in prompt
+            email_recipient = "apptestvatsal@gmail.com"
+            for email in re.findall(r'[\w\.-]+@[\w\.-]+\.\w+', user_content):
+                if "acme" not in email:
+                    email_recipient = email
+                    break
+
             return {
                 "plan": [
                     {
@@ -179,7 +186,7 @@ class LLMClient:
                         "depends_on": [],
                         "risk_level": "low",
                         "expected_outcome": "IT portal dashboard loaded showing service status cards",
-                        "failure_alternative": "Check service status via GET /api/services",
+                        "failure_alternative": "Check service status via GET http://localhost:5001/api/services",
                     },
                     {
                         "step_id": 2,
@@ -190,7 +197,7 @@ class LLMClient:
                         "depends_on": [1],
                         "risk_level": "low",
                         "expected_outcome": "Extracted service names and statuses (VPN down, CRM degraded)",
-                        "failure_alternative": "Query /api/services",
+                        "failure_alternative": "Query http://localhost:5001/api/services",
                     },
                     {
                         "step_id": 3,
@@ -245,17 +252,17 @@ class LLMClient:
                     },
                     {
                         "step_id": 6,
-                        "description": "Notify IT team of outages and ticket creation (requires approval)",
+                        "description": f"Send incident alert email to {email_recipient} (requires approval)",
                         "tool": "send_email",
                         "action": "send",
                         "params": {
-                            "to": "priya@acme.corp",
+                            "to": email_recipient,
                             "subject": "CRITICAL INCIDENT ALERT: VPN Down (P1) & CRM Degraded (P2)",
                             "body": "Nexus Autonomous Agent has detected the following service issues:\n\n1. Corporate VPN: DOWN -> P1 Ticket created, assigned to Priya Sharma.\n2. Customer CRM: DEGRADED -> P2 Ticket created, assigned to Sarah Chen.\n\nPlease inspect the IT portal and initiate incident remediation.",
                         },
                         "depends_on": [4, 5],
                         "risk_level": "high",
-                        "expected_outcome": "Notification sent to designated on-call engineer",
+                        "expected_outcome": "Notification sent to designated recipient",
                         "failure_alternative": "Log notification to file",
                     },
                     {
@@ -267,7 +274,7 @@ class LLMClient:
                         "depends_on": [4, 5],
                         "risk_level": "low",
                         "expected_outcome": "Tickets table displayed with newly created tickets",
-                        "failure_alternative": "Verify via GET /api/tickets",
+                        "failure_alternative": "Verify via GET http://localhost:5001/api/tickets",
                     },
                     {
                         "step_id": 8,
